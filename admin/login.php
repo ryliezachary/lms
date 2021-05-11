@@ -4,7 +4,9 @@
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 
-		$query = mysql_query("SELECT * FROM users WHERE username='$username' AND password='$password'")or die(mysql_error());
+		$encryptedPass= sha1($password);
+				
+		$query = mysql_query("SELECT * FROM users WHERE username='$username' AND password='$encryptedPass'")or die(mysql_error());
 		$count = mysql_num_rows($query);
 		$row = mysql_fetch_array($query);
 
