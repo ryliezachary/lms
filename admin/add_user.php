@@ -50,9 +50,9 @@ $firstname = $_POST['firstname'];
 $lastname = $_POST['lastname'];
 $username = $_POST['username'];
 $password = $_POST['password'];
+$encryptedPass = sha1($password);
 
-
-$query = mysql_query("select * from users where username = '$username' and password = '$password' and firstname = '$firstname' and password = '$password' ")or die(mysql_error());
+$query = mysql_query("select * from users where username = '$username' and password = '$encryptedPass'")or die(mysql_error());
 $count = mysql_num_rows($query);
 
 if ($count > 0){ ?>
@@ -61,7 +61,9 @@ alert('Data Already Exist');
 </script>
 <?php
 }else{
-mysql_query("insert into users (username,password,firstname,lastname) values('$username','$password','$firstname','$lastname')")or die(mysql_error());
+	
+	
+mysql_query("insert into users (username,password,firstname,lastname) values('$username','$encryptedPass','$firstname','$lastname')")or die(mysql_error());
 
 mysql_query("insert into activity_log (date,username,action) values(NOW(),'$user_username','Add User $username')")or die(mysql_error());
 ?>
