@@ -89,12 +89,11 @@ where student_id=$session_id and teacher_class_id=$get_id");
 <td width="30" id="qa"><?php echo $x;?></td>
 <td id="qa">
 <?php echo $roww['question_text'];?>
-<br>
 <hr>
 <?php
 if($roww['question_type_id']=='2'){
 ?>
-    <input name="<?php echo $roww['quiz_question_id'];?>" value="True" type="radio"> True&nbsp;|&nbsp;<input name="<?php echo $roww['quiz_question_id'];?>" value="False" type="radio"> False
+    <input name="<?php echo $roww['quiz_question_id'];?>" value="True" type="radio"> True&nbsp;&nbsp;<input name="<?php echo $roww['quiz_question_id'];?>" value="False" type="radio"> False
 <?php
 } else if($roww['question_type_id']=='1') {
     $sqly = mysql_query("SELECT * FROM answer WHERE quiz_question_id = '".$roww['quiz_question_id']."'");
@@ -111,10 +110,20 @@ if($roww['question_type_id']=='2'){
     <?php
         }
     }
+} else if($roww['question_type_id']=='3') {
+    echo '<label for="Single Line Answer">Answer</label>'; 
+    echo '<input name="' . $roww['quiz_question_id'] . '" value="" type="text"><br><br>';
+
+} else if($roww['question_type_id']=='4') {
+    echo '<label for="Multi Line Answer">Answer</label>';
+    echo '<textarea id="multi_line_answer" name="' . $roww['quiz_question_id'] . '" rows="4" cols="50"></textarea><br><br>';
+
 }
+
+
 ?>
 <br/>
-
+<br/>
 
 </td>
 </tr>

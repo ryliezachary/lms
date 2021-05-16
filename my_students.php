@@ -52,18 +52,36 @@
 													<p class="class"><?php echo $row['lastname'];?></p>
 													<p class="subject"><?php echo $row['firstname']; ?></p>
                                                     <?php
-                                                       $check_survey=select_info_multiple_key("select * from survey_answer where id_student=".$row['student_id']."
-                                                                                                and con=1");
+                                                       //$check_survey = select_info_multiple_key("select * from survey_answer where id_student=".$row['student_id']." and con=1");
+													   //$check_survey = select_info_multiple_key("SELECT * FROM survey_answer WHERE id_student=".$row['student_id']." AND con=1 ORDER BY answer DESC");
+													   
+													   $result = mysql_query("SELECT * FROM survey_answer WHERE id_student=".$row['student_id']." AND con=1 ORDER BY answer DESC, category ASC") or die(mysql_error());
+													   $num_rows = mysql_num_rows($result);
 
-                                                       if($check_survey)
+														
+														if ($num_rows == 0) {
+															echo '<span class="label label-important">No Learning Style</span><br>';
+														} else {
+															echo '<span class="label label-success">Rank by<br>Learning Style</span><br>';
+														}
+
+														$rank_counter = 1;
+														while ($row = mysql_fetch_array($result)) {
+															echo' <span class="badge badge-info" title="Total Survey Answer: ' . $row['answer'] . '">' . $rank_counter . '. ' . $row['category'] . '</span><br>';
+														
+														$rank_counter++;
+														}
+														
+
+                                                       /*if($check_survey)
                                                        {
                                                            foreach($check_survey as $s)
                                                            {
                                                                echo $s['category']."<br>";
                                                            }
-                                                       }
+                                                       }*/
                                                     ?>
-													<a  href="#<?php echo $id; ?>" data-toggle="modal"><i class="icon-trash"></i> Remove</a>
+													<br><a  href="#<?php echo $id; ?>" data-toggle="modal"><i class="icon-trash"></i> Remove</a>
 											</li>
 											<?php include("remove_student_modal.php"); ?>
 											<?php } ?>
