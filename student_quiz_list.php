@@ -51,14 +51,23 @@
 										<tbody>
                               		<?php
 
-
-										$query = mysql_query("select * FROM class_quiz
+										/*$query = mysql_query("select * FROM class_quiz
 										LEFT JOIN quiz on class_quiz.quiz_id = quiz.quiz_id
 										where teacher_class_id = '$get_id'
                                         and file_id in
                                         (select file_id from file_student where
                                         student_id=$session_id)
-                                         order by class_quiz_id DESC ")or die(mysql_error());
+                                         order by class_quiz_id DESC ")or die(mysql_error());*/
+
+										 $query = mysql_query("select * FROM class_quiz
+										 LEFT JOIN quiz on class_quiz.quiz_id = quiz.quiz_id
+										 where teacher_class_id = '$get_id'
+										 OR file_id in
+										 (select file_id from file_student where
+										 student_id=$session_id)
+										  order by class_quiz_id DESC ")or die(mysql_error());
+
+
 										while($row = mysql_fetch_array($query)){
 										$id  = $row['class_quiz_id'];
 										$quiz_id  = $row['quiz_id'];
