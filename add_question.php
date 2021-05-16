@@ -69,10 +69,24 @@
 														C: <input type="text" name="ans3" size="60"> <input name="answer" value="C" type="radio"><br><br>
 														D: <input type="text" name="ans4" size="60"> <input name="answer" value="D" type="radio"><br><br>
 													</div>
+
 													<div id="opt12">
-														<input name="correctt" value="True" type="radio">True<br /><br />
-														<input name="correctt"  value="False" type="radio">False<br /><br />
+														<input name="correctt" value="True" type="radio"> True<br><br>
+														<input name="correctt"  value="False" type="radio"> False<br><br>
 													</div>
+
+													<div id="opt13">
+														<label for="Single Line Answer">Recommended Answer</label>
+														<input name="single_line_answer" value="" type="text"><br><br>
+													</div>
+
+													<div id="opt14">
+														<label for="Multi Line Answer">Guide/Teacher Notes for grading the answer</label>
+														<textarea id="multi_line_answer" name="multi_line_answer" rows="4" cols="50"></textarea>
+													</div>
+
+													
+
 											</div>
 										</div>
 									
@@ -100,23 +114,37 @@
 		$ans2 = $_POST['ans2'];
 		$ans3 = $_POST['ans3'];
 		$ans4 = $_POST['ans4'];
-		
-		if ($type  == '2'){
-				mysql_query("insert into quiz_question (quiz_id,question_text,date_added,answer,question_type_id) 
-			values('$get_id','$question',NOW(),'".$_POST['correctt']."','$type')")or die(mysql_error());
-		}else{
-	
-		mysql_query("insert into quiz_question (quiz_id,question_text,date_added,answer,question_type_id) 
-		values('$get_id','$question',NOW(),'$answer','$type')")or die(mysql_error());
-		$query = mysql_query("select * from quiz_question order by quiz_question_id DESC LIMIT 1")or die(mysql_error());
-		$row = mysql_fetch_array($query);
-		$quiz_question_id = $row['quiz_question_id'];
-		
-		mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans1','A')")or die(mysql_error());
-		mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans2','B')")or die(mysql_error());
-		mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans3','C')")or die(mysql_error());
-		mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans4','D')")or die(mysql_error());
-		
+
+		if  ($type  == '1') {
+
+			mysql_query("insert into quiz_question (quiz_id,question_text,date_added,answer,question_type_id) 
+			values('$get_id','$question',NOW(),'$answer','$type')")or die(mysql_error());
+			$query = mysql_query("select * from quiz_question order by quiz_question_id DESC LIMIT 1")or die(mysql_error());
+			$row = mysql_fetch_array($query);
+			$quiz_question_id = $row['quiz_question_id'];
+			
+			mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans1','A')") or die(mysql_error());
+			mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans2','B')") or die(mysql_error());
+			mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans3','C')") or die(mysql_error());
+			mysql_query("insert into answer (quiz_question_id,answer_text,choices) values('$quiz_question_id','$ans4','D')") or die(mysql_error());
+
+		} elseif ($type  == '2') {
+
+			mysql_query("insert into quiz_question (quiz_id,question_text,date_added,answer,question_type_id) 
+			values('$get_id','$question',NOW(),'".$_POST['correctt']."','$type')") or die(mysql_error());
+
+		} elseif ($type  == '3') {	
+
+			$single_line_answer = trim($_POST['single_line_answer']);
+			mysql_query("insert into quiz_question (quiz_id,question_text,date_added,answer,question_type_id) 
+			values('$get_id','$question',NOW(),'$single_line_answer','$type')") or die(mysql_error());
+
+		} elseif ($type  == '4') {	
+
+			$multi_line_answer = trim($_POST['multi_line_answer']);
+			mysql_query("insert into quiz_question (quiz_id,question_text,date_added,answer,question_type_id) 
+			values('$get_id','$question',NOW(),'$multi_line_answer','$type')") or die(mysql_error());
+			
 		}
 		
 	?>
@@ -137,7 +165,8 @@
 	jQuery(document).ready(function(){
 		jQuery("#opt11").hide();
 		jQuery("#opt12").hide();
-		jQuery("#opt13").hide();		
+		jQuery("#opt13").hide();
+		jQuery("#opt14").hide();		
 
 		jQuery("#qtype").change(function(){	
 			var x = jQuery(this).val();			
@@ -145,14 +174,27 @@
 				jQuery("#opt11").show();
 				jQuery("#opt12").hide();
 				jQuery("#opt13").hide();
+				jQuery("#opt14").hide();
 			} else if(x == '2') {
 				jQuery("#opt11").hide();
 				jQuery("#opt12").show();
 				jQuery("#opt13").hide();
+				jQuery("#opt14").hide();
+			} else if(x == '3') {
+				jQuery("#opt11").hide();
+				jQuery("#opt12").hide();
+				jQuery("#opt13").show();
+				jQuery("#opt14").hide();
+			} else if(x == '4') {
+				jQuery("#opt11").hide();
+				jQuery("#opt12").hide();
+				jQuery("#opt13").hide();
+				jQuery("#opt14").show();
 			} else {
 				jQuery("#opt11").hide();
 				jQuery("#opt12").hide();
 				jQuery("#opt13").hide();
+				jQuery("#opt14").hide();
 			}
 		});
 		
